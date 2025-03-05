@@ -1,0 +1,45 @@
+[tools]
+java = "zulu-11"
+node = "18.19.1"
+pnpm = "7.33.6"
+python = "3.11"
+ruby = "2.7"
+
+[env]
+_.python.venv = { path = "venv", create = true }
+_.path = [
+    "../buildtools/llvm/bin",
+    "../buildtools/ninja",
+    "tools/gn_tools",
+    "tools_shared",
+    "{{env.ANDROID_HOME}}/platform-tools"
+]
+ANDROID_HOME = "{{env.HOME}}/Library/Android/sdk"
+ANDROID_NDK = "{{env.HOME}}/Library/Android/sdk/ndk/21.1.6352462"
+ANDROID_SDK = "{{env.ANDROID_HOME}}"
+BUILDTOOLS_DIR = "../buildtools"
+
+
+[tasks.python]
+description = "Install python dependencies"
+run = "python3 -m pip install -r requirements.txt"
+
+[tasks.integrate]
+description = "Integrate source and binary dependencies"
+depends = ['python']
+run = "tools/hab sync"
+dir = "{{cwd}}"
+
+[tasks.android-sdk]
+description = "Install android sdk"
+run = """
+chmod +x tools/android_tools/prepare_android_build.sh
+tools/android_tools/prepare_android_build.sh
+"""
+
+[tasks.android-explorer]
+alias = "aex"
+description = "Build android lynx explorer"
+depends = ['integrate', 'python', 'android-sdk']
+run = "./gradlew :LynxExplorer:assemblenoasandebug --no-daemon"
+dir = "{{cwd}}/explorer/android"

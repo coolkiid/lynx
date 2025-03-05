@@ -49,25 +49,6 @@ deps = {
         ],
         "require": ['../buildtools/emsdk']
     },
-    '../buildtools/node': {
-        "type": "http",
-        "url": {
-            "linux-x86_64": "https://nodejs.org/dist/v18.19.1/node-v18.19.1-linux-x64.tar.gz",
-            "linux-arm64": "https://nodejs.org/dist/v18.19.1/node-v18.19.1-linux-arm64.tar.gz",
-            "darwin-x86_64": "https://nodejs.org/dist/v18.19.1/node-v18.19.1-darwin-x64.tar.gz",
-            "darwin-arm64": "https://nodejs.org/dist/v18.19.1/node-v18.19.1-darwin-arm64.tar.gz",
-            "windows-x86_64": "https://nodejs.org/dist/v18.19.1/node-v18.19.1-win-x64.zip"
-        }.get(f'{system}-{machine}', None),
-        "sha256": {
-            "linux-x86_64": "724802c45237477dbe5777923743e6c77906830cae03a82b5653ebd75b301dda",
-            "linux-arm64": "2913e8544d95c8be9e6034c539ec0584014532166a088bf742629756c3ec42e2",
-            "darwin-x86_64": "ab67c52c0d215d6890197c951e1bd479b6140ab630212b96867395e21d813016",
-            "darwin-arm64": "0c7249318868877032ed21cc0ed450015ee44b31b9b281955521cd3fc39fbfa3",
-            "windows-x86_64": "ff08f8fe253fba9274992d7052e9d9a70141342d7b36ddbd6e84cbe823e312c6"
-        }.get(f'{system}-{machine}', None),
-        "ignore_in_git": True,
-        "condition": system in ['linux', 'darwin', 'windows']
-    },
     "../third_party/xhook": {
         'type': 'git',
         'url': 'https://github.com/iqiyi/xHook.git',
@@ -226,36 +207,6 @@ deps = {
         "url": "https://github.com/lynx-family/primjs.git",
         "commit": "ea4d2d5d6e5fa4d36d31af560f00fb1880f52fe7",
         "ignore_in_git": True,
-    },
-    '../buildtools/corepack/pnpm/7.33.6': {
-        "type": "http",
-        "url": "https://registry.npmjs.org/pnpm/-/pnpm-7.33.6.tgz",
-        "sha256": "f0c52b41f8128da92160f6826b53a105aad31c6c7cdc00b907fde507c5ca09b5",
-        "ignore_in_git": True
-    },
-    # setup corepack and pnpm
-    'setup_corepack_pnpm': {
-        "type": "action",
-        "cwd": root_dir,
-        "env": {
-            'NODE_CHANNEL_FD': '1' if not system == 'windows' else '',
-            'COREPACK_HOME': os.path.join(root_dir, '../buildtools', 'corepack'),
-            # Windows does not have `node/bin` dir
-            # And it also use `;` as seperator of PATH
-            'PATH': f"{os.path.join(root_dir, '../buildtools', 'node')};{os.environ.get('PATH')}"
-               if system == "windows"
-               else f"{os.path.join(root_dir, '../buildtools', 'node', 'bin')}:{os.environ.get('PATH')}"
-        },
-        "commands": [
-            "corepack prepare pnpm@7.33.6 --activate",
-            "corepack enable",
-            "pnpm install --frozen-lockfile"
-        ],
-        "require": [
-            "../buildtools/node",
-            "../buildtools/corepack/pnpm/7.33.6",
-        ],
-        "condition": system in ['linux', 'darwin', 'windows']
     },
     ### AUTO GENERATED SCRIPT START
     'gen_feature_count': {
