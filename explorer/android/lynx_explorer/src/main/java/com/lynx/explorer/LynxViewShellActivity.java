@@ -17,6 +17,7 @@ import android.view.DisplayCutout;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -160,7 +161,7 @@ public class LynxViewShellActivity extends AppCompatActivity {
   }
 
   public boolean isNotchScreen() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
       return false;
     }
 
@@ -213,7 +214,8 @@ public class LynxViewShellActivity extends AppCompatActivity {
     builder.setGenericResourceFetcher(new DemoGenericResourceFetcher());
     builder.setTemplateResourceFetcher(new DemoTemplateResourceFetcher(this));
     builder.setMediaResourceFetcher(new DemoMediaResourceFetcher());
-    // Parse the URL parameters and specify the LynxView width, height, and density according to the
+    // Parse the URL parameters and specify the LynxView width, height, and density
+    // according to the
     // parameters.
     QueryMapUtils queryMap = new QueryMapUtils();
     queryMap.parse(url);
