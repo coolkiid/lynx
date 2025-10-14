@@ -78,7 +78,7 @@ export default function Explorer() {
         withTheme={withTheme}
         showPage={state.showHomePage}
       />
-      <SettingsPage
+      <SettingsPageXXX
         themes={state.themes}
         currentTheme={state.currentTheme}
         withNotchScreen={withNotchScreen}
